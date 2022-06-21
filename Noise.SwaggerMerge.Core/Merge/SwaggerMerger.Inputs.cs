@@ -59,15 +59,14 @@ public static partial class SwaggerMerger
         SwaggerDocument? output,
         SwaggerDocument input)
     {
-        if (input.Definitions == null || output?.Definitions == null)
+        if (input.Components == null || output?.Components == null)
         {
             return;
         }
 
-        foreach (var definition in input.Definitions.Where(definition =>
-                     !output.Definitions.ContainsKey(definition.Key)))
+        foreach (var definition in input.Components.Schemes)
         {
-            output.Definitions.AddOrUpdate(definition.Key, definition.Value);
+            output.Components.Schemes.AddOrUpdate(definition.Key, definition.Value);
         }
     }
 

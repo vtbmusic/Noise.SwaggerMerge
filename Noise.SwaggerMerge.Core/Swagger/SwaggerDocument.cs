@@ -15,8 +15,8 @@ public class SwaggerDocument
     /// <summary>
     /// Gets or sets the Swagger specification version.
     /// </summary>
-    [JsonProperty("swagger", NullValueHandling = NullValueHandling.Ignore)]
-    public string SwaggerVersion { get; set; } = "2.0";
+    [JsonProperty("openapi", NullValueHandling = NullValueHandling.Ignore)]
+    public string OpenApiVersion { get; set; } = "3.0.1";
 
     /// <summary>
     /// Gets or sets the metadata about the API.
@@ -37,10 +37,19 @@ public class SwaggerDocument
     public string? BasePath { get; set; }
 
     /// <summary>
+    ///// Gets or sets the responses to be reused across operations.
+    ///// </summary>
+    //[JsonProperty("components", NullValueHandling = NullValueHandling.Ignore)]
+    //public Dictionary<string, SwaggerDocumentProperty>? Components { get; set; } = new();
+
+    /// <summary>
     /// Gets or sets the transfer protocol of the API.
     /// </summary>
-    [JsonProperty("schemes", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("schemas", NullValueHandling = NullValueHandling.Ignore)]
     public List<string>? Schemes { get; set; }
+
+    [JsonProperty("components", NullValueHandling = NullValueHandling.Ignore)]
+    public SwaggerDocumentComponents? Components { get; set; } = new();
 
     /// <summary>
     /// Gets or sets a list of MIME types the APIs can produce.
@@ -65,12 +74,6 @@ public class SwaggerDocument
     /// </summary>
     [JsonProperty("parameters", NullValueHandling = NullValueHandling.Ignore)]
     public Dictionary<string, SwaggerDocumentProperty>? Parameters { get; set; } = new();
-
-    /// <summary>
-    /// Gets or sets the responses to be reused across operations.
-    /// </summary>
-    [JsonProperty("responses", NullValueHandling = NullValueHandling.Ignore)]
-    public Dictionary<string, SwaggerDocumentProperty>? Responses { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the security scheme to be reused across the specification.
@@ -303,6 +306,43 @@ public class SwaggerDocumentInfo
     public string Version { get; set; }
 }
 
+public class SwaggerDocumentComponents
+{
+    [JsonProperty("schemas", NullValueHandling = NullValueHandling.Ignore)]
+    public SwaggerDocumentSchemes? Schemes { get; set; } = new();
+}
+
+public class SwaggerDocumentSchemes : Dictionary<string, SwaggerDocumentSchemeItem>
+{
+
+}
+public class SwaggerDocumentSchemeItem
+{
+    [JsonProperty("enum", NullValueHandling = NullValueHandling.Ignore)]
+    public int[]? Enum{ get;set; }
+    [JsonProperty("format", NullValueHandling = NullValueHandling.Ignore)]
+    public string? Format { get; set; }
+    [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
+    public string? Type { get; set; }
+    [JsonProperty("additionalProperties", NullValueHandling = NullValueHandling.Ignore)]
+    public bool? AdditionalProperties { get; set; }
+    [JsonProperty("properties", NullValueHandling = NullValueHandling.Ignore)]
+    public SwaggerDocumentProperties? Properties { get; set; }
+    [JsonProperty("required", NullValueHandling = NullValueHandling.Ignore)]
+    public string[]? Required { get; set; }
+} 
+
+public class SwaggerDocumentProperties : Dictionary<string, SwaggerDocumentPropertiesItem>
+{
+
+}
+
+
+public class SwaggerDocumentPropertiesItem
+{
+    [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
+    public string? Type { get; set; }
+}
 /// <summary>
 /// Defines the relative paths to the individual endpoints.
 /// </summary>
@@ -515,3 +555,4 @@ public class SwaggerDocumentProperty
         JTokenProperties.AddRange(additionalProperties);
     }
 }
+
